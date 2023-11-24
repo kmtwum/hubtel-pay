@@ -22,16 +22,19 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 defined('ABSPATH') or die;
 
-if (!in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) return;
+if (!in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+    return;
+}
 
 add_action('plugins_loaded', 'hubtel_init', 11);
 add_filter('woocommerce_payment_gateways', 'add_to_gateways');
 add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'wc_hubtel_pay_plugin_links');
 
-function wc_hubtel_pay_plugin_links($links)
+function wc_hubtel_pay_plugin_links($links): array
 {
     $plugin_links = array(
-        '<a href="' . admin_url('admin.php?page=wc-settings&tab=checkout&section=hubtel-pay') . '">' . __('Configure', 'hubtel-pay') . '</a>'
+        '<a href="' . admin_url('admin.php?page=wc-settings&tab=checkout&section=hubtel-pay') . '">'
+        . __('Configure', 'hubtel-pay') . '</a>'
     );
     return array_merge($plugin_links, $links);
 }
