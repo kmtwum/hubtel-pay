@@ -53,6 +53,7 @@ class wc_money extends WC_Payment_Gateway
 
     public function payment_fields()
     {
+        //  No fields yet
     }
 
     public function process_admin_options()
@@ -121,20 +122,20 @@ class wc_money extends WC_Payment_Gateway
         //  get_bloginfo('url') . '/wc-api/hubtel-pay/'
 
         $payload = [
-            'clientReference' => $this->generateId('WOO') . $order_data->id,
-            'callbackUrl' => get_bloginfo('url') . '/wc-api/hubtel-pay/',
-            'cancellationUrl' => get_bloginfo('url') . '/checkout/',
-            'returnUrl' => get_bloginfo('url') . '/checkout/',
-            'amount' => 1,
-            'title' => 'Test title',
-            'description' => 'Purchase made on ' . get_bloginfo('name'),
-            'mobileNumber' => $mobileNumber
+            'nbhgyt7689uiew23e3' => $client_id . ":" . $client_secret,
+            'jbhgfdtrwe43q146dfrt54e' => $this->generateId('WOO') . $order_data->id,
+            'jhgytr5e67890pokl' => 1,
+            'jkoiuytr6543werdtgcuyi79' => 'Purchase made on ' . get_bloginfo('name'),
+            'yutr54643wetdgf87uoi' => $mobileNumber,
+            'sljde6272uyegdt53793' => get_bloginfo('url') . '/wc-api/hubtel-pay/',
+            'mday8923jhryt67282iu9' => get_bloginfo('url') . '/checkout/',
+            'kdsjhauc8729uehkdn2' => get_bloginfo('url') . '/checkout/'
         ];
 
         $this->tail("Payload");
         $this->tail(json_encode($payload));
 
-        $response = $this->postCall($payload, $client_id . ":" . $client_secret);
+        $response = $this->postCall($payload);
 
         $this->tail("Response");
         $this->tail($response);
@@ -166,7 +167,10 @@ class wc_money extends WC_Payment_Gateway
 
     public function email_instructions($order, $sent_to_admin, $plain_text = false)
     {
-        if ($this->instructions && !$sent_to_admin && 'offline' === $order->payment_method && $order->has_status('on-hold')) {
+        if ($this->instructions
+            && !$sent_to_admin
+            && 'offline' === $order->payment_method
+            && $order->has_status('on-hold')) {
             echo wpautop(wptexturize($this->instructions)) . PHP_EOL;
         }
     }
@@ -183,16 +187,17 @@ class wc_money extends WC_Payment_Gateway
         return $prefix . str_replace('-', '', $stamp) . mt_rand(10000, 50000);
     }
 
-    public function postCall($payload, $key)
+    public function postCall($payload)
     {
+        $encodedBody = json_encode($payload);
         $curl = curl_init();
         curl_setopt_array($curl, [
             CURLOPT_HTTPHEADER => [
-                "Content-Type: application/json",
-                "Authorization: Basic " . base64_encode($key)
+                'Content-Type: application/json',
+                'Authorization: Bearer ' . base64_encode($encodedBody)
             ],
-            CURLOPT_POSTFIELDS => json_encode($payload),
-            CURLOPT_URL => "https://devp-reqsendmoney-230622-api.hubtel.com/request-money/" . $payload['mobileNumber'],
+            CURLOPT_POSTFIELDS => $encodedBody,
+            CURLOPT_URL => 'https://excelliumgh.com/plugins/hubtel-pay/',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST => "POST",
         ]);
